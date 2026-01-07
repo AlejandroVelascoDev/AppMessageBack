@@ -1,1 +1,0 @@
-{"timestamp":"2026-01-06T21:17:03.454101","status":500,"error":"Internal Server Error","message":"Required request body is missing: public com.mobile.backend.dto.auth.AuthResponse com.mobile.backend.controller.AuthController.register(com.mobile.backend.dto.auth.RegisterRequest)"}
