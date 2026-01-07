@@ -57,4 +57,3 @@ src
 |
 └── websocket // Lógica específica de WebSockets (Handlers, interceptores)
 ├── WebSocketEventListener.java // Para eventos de conexión/desconexión
-└── ChatWebSocketHandler.java // Si usas WebSockets sin STOMP directamente
