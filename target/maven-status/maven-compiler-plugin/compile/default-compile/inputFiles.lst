@@ -1,4 +1,5 @@
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\controller\ChatController.java
+E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\security\CustomUserDetails.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\dto\auth\RegisterRequest.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\dto\auth\LoginRequest.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\dto\message\MessageRequest.java
@@ -16,6 +17,7 @@ E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\dto\use
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\controller\AuthController.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\dto\user\UserProfileUpdateRequest.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\security\JwtAuthenticationFilter.java
+E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\websocket\JwtHandshakeInterceptor.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\controller\UserController.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\config\PasswordConfig.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\service\UserService.java
@@ -25,10 +27,13 @@ E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\Backend
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\entity\User.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\service\MessageService.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\repository\UserRepository.java
+E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\dto\chat\ChatMessageRequest.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\service\ChatService.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\entity\Message.java
+E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\websocket\ChatWebSocketHandler.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\config\CorsConfig.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\repository\MessageRepository.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\controller\HealthController.java
+E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\dto\chat\ChatMessageResponse.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\security\CustomUserDetailsService.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\config\WebSocketConfig.java
