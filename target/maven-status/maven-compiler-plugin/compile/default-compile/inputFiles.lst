@@ -16,6 +16,7 @@ E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\control
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\dto\user\UserResponse.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\controller\AuthController.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\dto\user\UserProfileUpdateRequest.java
+E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\config\DataInitializer.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\security\JwtAuthenticationFilter.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\websocket\JwtHandshakeInterceptor.java
 E:\MobileProject\AppMessageBack\backend\src\main\java\com\mobile\backend\controller\UserController.java
