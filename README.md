@@ -133,3 +133,7 @@ src/main/java/com/mobile/backend/
 ├── service/         # Logica de negocio
 └── websocket/       # Handlers y configuracion WebSocket
 ```
+
+diagram of the API
+<img width="884" height="897" alt="image" src="https://github.com/user-attachments/assets/f60c1a79-a262-4015-9783-e705949ba80e" />
+
