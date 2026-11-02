@@ -14,38 +14,39 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
     
     // Buscar mensajes de un chat específico, ordenados por timestamp
-    List<Message> findByChatIdOrderByTimestampAsc(Long chatId);
+    List<Message> findByChatIdOrderByTimestampAsc(UUID chatId);
     
     // Buscar mensajes de un chat con paginación
-    Page<Message> findByChatIdOrderByTimestampDesc(Long chatId, Pageable pageable);
+    Page<Message> findByChatIdOrderByTimestampDesc(UUID chatId, Pageable pageable);
     
     // Buscar mensajes enviados por un usuario específico
-    List<Message> findBySenderIdOrderByTimestampDesc(Long senderId);
+    List<Message> findBySenderIdOrderByTimestampDesc(UUID senderId);
     
     // Buscar mensajes por tipo
-    List<Message> findByChatIdAndMessageType(Long chatId, MessageType messageType);
+    List<Message> findByChatIdAndMessageType(UUID chatId, MessageType messageType);
     
     // Buscar mensajes por estado
-    List<Message> findByChatIdAndStatus(Long chatId, MessageStatus status);
+    List<Message> findByChatIdAndStatus(UUID chatId, MessageStatus status);
     
     // Contar mensajes no leídos en un chat para un usuario
     @Query("SELECT COUNT(m) FROM Message m WHERE m.chat.id = :chatId " +
            "AND m.sender.id != :userId AND m.status != 'READ'")
-    long countUnreadMessages(@Param("chatId") Long chatId, @Param("userId") Long userId);
+    long countUnreadMessages(@Param("chatId") UUID chatId, @Param("userId") UUID userId);
     
     // Obtener el último mensaje de un chat
     @Query("SELECT m FROM Message m WHERE m.chat.id = :chatId " +
            "ORDER BY m.timestamp DESC LIMIT 1")
-    Message findLastMessageByChatId(@Param("chatId") Long chatId);
+    Message findLastMessageByChatId(@Param("chatId") UUID chatId);
     
     // Buscar mensajes en un rango de fechas
     List<Message> findByChatIdAndTimestampBetween(
-        Long chatId, 
+        UUID chatId, 
         LocalDateTime start, 
         LocalDateTime end
     );
@@ -54,21 +55,21 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Modifying
     @Query("UPDATE Message m SET m.status = 'READ' " +
            "WHERE m.chat.id = :chatId AND m.sender.id != :userId AND m.status != 'READ'")
-    int markMessagesAsRead(@Param("chatId") Long chatId, @Param("userId") Long userId);
+    int markMessagesAsRead(@Param("chatId") UUID chatId, @Param("userId") UUID userId);
     
     // Marcar mensajes como entregados
     @Modifying
     @Query("UPDATE Message m SET m.status = 'DELIVERED' " +
            "WHERE m.chat.id = :chatId AND m.sender.id != :userId AND m.status = 'SENT'")
-    int markMessagesAsDelivered(@Param("chatId") Long chatId, @Param("userId") Long userId);
+    int markMessagesAsDelivered(@Param("chatId") UUID chatId, @Param("userId") UUID userId);
     
     // Buscar mensajes que contienen un texto específico
     @Query("SELECT m FROM Message m WHERE m.chat.id = :chatId " +
            "AND LOWER(m.content) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
-    List<Message> searchMessagesInChat(@Param("chatId") Long chatId, @Param("searchTerm") String searchTerm);
+    List<Message> searchMessagesInChat(@Param("chatId") UUID chatId, @Param("searchTerm") String searchTerm);
     
     // Eliminar mensajes antiguos de un chat
     @Modifying
     @Query("DELETE FROM Message m WHERE m.chat.id = :chatId AND m.timestamp < :beforeDate")
-    int deleteOldMessages(@Param("chatId") Long chatId, @Param("beforeDate") LocalDateTime beforeDate);
+    int deleteOldMessages(@Param("chatId") UUID chatId, @Param("beforeDate") LocalDateTime beforeDate);
 }

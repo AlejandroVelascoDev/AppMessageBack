@@ -14,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 /**
  * REST Controller for managing messages
  * Provides HTTP fallback for sending messages when WebSocket is not available
@@ -35,12 +37,12 @@ public class MessageController {
      */
     @PostMapping("/{chatId}/messages")
     public ResponseEntity<ChatMessageResponse> sendMessage(
-            @PathVariable Long chatId,
+            @PathVariable UUID chatId,
             @Valid @RequestBody ChatMessageRequest request) {
         
         try {
             // Get authenticated user ID
-            Long senderId = getAuthenticatedUserId();
+            UUID senderId = getAuthenticatedUserId();
             
             // Verify user is participant in the chat
             if (!chatService.isUserInChat(chatId, senderId)) {
@@ -79,11 +81,11 @@ public class MessageController {
      */
     @GetMapping("/{chatId}/messages/{messageId}")
     public ResponseEntity<ChatMessageResponse> getMessage(
-            @PathVariable Long chatId,
+            @PathVariable UUID chatId,
             @PathVariable Long messageId) {
         
         try {
-            Long userId = getAuthenticatedUserId();
+            UUID userId = getAuthenticatedUserId();
             
             // Verify user has access to this chat
             if (!chatService.isUserInChat(chatId, userId)) {
@@ -115,11 +117,11 @@ public class MessageController {
      */
     @DeleteMapping("/{chatId}/messages/{messageId}")
     public ResponseEntity<DeleteMessageResponse> deleteMessage(
-            @PathVariable Long chatId,
+            @PathVariable UUID chatId,
             @PathVariable Long messageId) {
         
         try {
-            Long userId = getAuthenticatedUserId();
+            UUID userId = getAuthenticatedUserId();
             
             // Verify user has access to this chat
             if (!chatService.isUserInChat(chatId, userId)) {
@@ -157,12 +159,12 @@ public class MessageController {
      */
     @PatchMapping("/{chatId}/messages/{messageId}")
     public ResponseEntity<ChatMessageResponse> updateMessage(
-            @PathVariable Long chatId,
+            @PathVariable UUID chatId,
             @PathVariable Long messageId,
             @Valid @RequestBody UpdateMessageRequest request) {
         
         try {
-            Long userId = getAuthenticatedUserId();
+            UUID userId = getAuthenticatedUserId();
             
             // Verify user has access to this chat
             if (!chatService.isUserInChat(chatId, userId)) {
@@ -180,7 +182,7 @@ public class MessageController {
         }
     }
 
-   private Long getAuthenticatedUserId() {
+   private UUID getAuthenticatedUserId() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     
     if (authentication == null || !authentication.isAuthenticated()) {
@@ -212,7 +214,7 @@ public class MessageController {
     @lombok.AllArgsConstructor
     public static class DeleteMessageResponse {
         private Long messageId;
-        private Long chatId;
+        private UUID chatId;
         private Boolean deleted;
     }
 }

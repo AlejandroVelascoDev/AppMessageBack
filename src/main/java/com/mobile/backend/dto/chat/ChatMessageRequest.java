@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 /**
  * Request DTO for sending a message
  */
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class ChatMessageRequest {
     
     @NotNull(message = "Chat ID is required")
-    private Long chatId;
+    private UUID chatId;
     
     @NotBlank(message = "Message content cannot be empty")
     private String content;

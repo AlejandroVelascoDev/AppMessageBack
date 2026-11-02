@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -69,7 +70,7 @@ public class ChatController {
     public ResponseEntity<List<ChatResponse>> getUserChats() {
         try {
             // Get authenticated user ID
-            Long userId = getAuthenticatedUserId();
+            UUID userId = getAuthenticatedUserId();
             
             // Fetch user's chats
             List<Chat> chats = chatService.getChatsByUserId(userId);
@@ -96,10 +97,10 @@ public class ChatController {
      * @return Chat details with participants and last message
      */
     @GetMapping("/{chatId}")
-    public ResponseEntity<ChatResponse> getChatById(@PathVariable Long chatId) {
+    public ResponseEntity<ChatResponse> getChatById(@PathVariable UUID chatId) {
         try {
             // Verify user has access to this chat
-            Long userId = getAuthenticatedUserId();
+            UUID userId = getAuthenticatedUserId();
             if (!chatService.isUserInChat(chatId, userId)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
@@ -128,13 +129,13 @@ public class ChatController {
      */
     @GetMapping("/{chatId}/messages")
     public ResponseEntity<MessageHistoryResponse> getChatMessages(
-            @PathVariable Long chatId,
+            @PathVariable UUID chatId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "50") int size) {
         
         try {
             // Verify user has access to this chat
-            Long userId = getAuthenticatedUserId();
+            UUID userId = getAuthenticatedUserId();
             if (!chatService.isUserInChat(chatId, userId)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
@@ -172,9 +173,9 @@ public class ChatController {
      * @return Number of messages marked as read
      */
     @PutMapping("/{chatId}/read")
-    public ResponseEntity<ReadStatusResponse> markMessagesAsRead(@PathVariable Long chatId) {
+    public ResponseEntity<ReadStatusResponse> markMessagesAsRead(@PathVariable UUID chatId) {
         try {
-            Long userId = getAuthenticatedUserId();
+            UUID userId = getAuthenticatedUserId();
             
             int messagesRead = messageService.markMessagesAsRead(chatId, userId);
             
@@ -197,9 +198,9 @@ public class ChatController {
      * @return Count of unread messages
      */
     @GetMapping("/{chatId}/unread-count")
-    public ResponseEntity<UnreadCountResponse> getUnreadCount(@PathVariable Long chatId) {
+    public ResponseEntity<UnreadCountResponse> getUnreadCount(@PathVariable UUID chatId) {
         try {
-            Long userId = getAuthenticatedUserId();
+            UUID userId = getAuthenticatedUserId();
             
             if (!chatService.isUserInChat(chatId, userId)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -223,7 +224,7 @@ public class ChatController {
      * Helper method to get authenticated user ID from security context
      * @return User ID of authenticated user
      */
-   private Long getAuthenticatedUserId() {
+   private UUID getAuthenticatedUserId() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     
     if (authentication == null || !authentication.isAuthenticated()) {
@@ -244,7 +245,7 @@ public class ChatController {
     @lombok.NoArgsConstructor
     @lombok.AllArgsConstructor
     public static class MessageHistoryResponse {
-        private Long chatId;
+        private UUID chatId;
         private List<ChatMessageResponse> messages;
         private Integer currentPage;
         private Integer pageSize;
@@ -258,7 +259,7 @@ public class ChatController {
     @lombok.NoArgsConstructor
     @lombok.AllArgsConstructor
     public static class ReadStatusResponse {
-        private Long chatId;
+        private UUID chatId;
         private Integer messagesMarkedAsRead;
     }
     
@@ -267,7 +268,7 @@ public class ChatController {
     @lombok.NoArgsConstructor
     @lombok.AllArgsConstructor
     public static class UnreadCountResponse {
-        private Long chatId;
+        private UUID chatId;
         private Long unreadCount;
     }
 }

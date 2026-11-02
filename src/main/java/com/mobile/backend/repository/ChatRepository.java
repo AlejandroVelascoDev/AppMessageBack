@@ -10,23 +10,24 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ChatRepository extends JpaRepository<Chat, Long> {
+public interface ChatRepository extends JpaRepository<Chat, UUID> {
     
     // search chats by type 
     List<Chat> findByType(ChatType type);
     
     // search types when the user is a participant
     @Query("SELECT c FROM Chat c JOIN c.participants p WHERE p.id = :userId")
-    List<Chat> findChatsByUserId(@Param("userId") Long userId);
+    List<Chat> findChatsByUserId(@Param("userId") UUID userId);
     
     // search chat between two users
     @Query("SELECT c FROM Chat c JOIN c.participants p1 JOIN c.participants p2 " +
            "WHERE c.type = 'SINGLE' AND p1.id = :user1Id AND p2.id = :user2Id")
     Optional<Chat> findSingleChatBetweenUsers(
-        @Param("user1Id") Long user1Id, 
-        @Param("user2Id") Long user2Id
+        @Param("user1Id") UUID user1Id, 
+        @Param("user2Id") UUID user2Id
     );
     
     // search groupal chat by name
@@ -34,10 +35,10 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     
    // Search for chats where a user is a participant, sorted by last update
     @Query("SELECT c FROM Chat c JOIN c.participants p WHERE p.id = :userId ORDER BY c.updatedAt DESC")
-    List<Chat> findChatsByUserIdOrderByUpdatedAtDesc(@Param("userId") Long userId);
+    List<Chat> findChatsByUserIdOrderByUpdatedAtDesc(@Param("userId") UUID userId);
     
     //  verify if a user is a participant of a chat
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END " +
            "FROM Chat c JOIN c.participants p WHERE c.id = :chatId AND p.id = :userId")
-    boolean isUserParticipant(@Param("chatId") Long chatId, @Param("userId") Long userId);
+    boolean isUserParticipant(@Param("chatId") UUID chatId, @Param("userId") UUID userId);
 }

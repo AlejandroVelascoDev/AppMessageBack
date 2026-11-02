@@ -9,6 +9,7 @@ import com.mobile.backend.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -26,7 +27,7 @@ public class UserService {
     return mapToResponse(user);
   }
 
-  public UserResponse getUserById(Long id) {
+  public UserResponse getUserById(UUID id) {
     User user = userRepository.findById(id)
       .orElseThrow(() -> new RuntimeException("User not found"));
     

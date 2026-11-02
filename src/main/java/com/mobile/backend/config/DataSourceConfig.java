@@ -45,6 +45,8 @@ public class DataSourceConfig {
       password = "postgres";
     }
 
+    jdbcUrl = disableServerPreparedStatements(jdbcUrl);
+
     HikariDataSource dataSource = new HikariDataSource();
     dataSource.setJdbcUrl(jdbcUrl);
     dataSource.setUsername(username);
@@ -55,6 +57,22 @@ public class DataSourceConfig {
 
   private static boolean isBlank(String value) {
     return value == null || value.isBlank();
+  }
+
+  /**
+   * Neon's pooled connection (PgBouncer) can keep stale server-side plans after
+   * a DDL change (for example, migrating BIGINT ids to UUID). Disabling the
+   * driver's server-side prepared statement cache avoids "cached plan must not
+   * change result type" errors.
+   */
+  private static String disableServerPreparedStatements(String jdbcUrl) {
+    if (jdbcUrl == null || !jdbcUrl.startsWith("jdbc:postgresql:")) {
+      return jdbcUrl;
+    }
+    if (jdbcUrl.contains("prepareThreshold=")) {
+      return jdbcUrl;
+    }
+    return jdbcUrl + (jdbcUrl.contains("?") ? "&" : "?") + "prepareThreshold=0";
   }
 
   private record ConnectionInfo(String jdbcUrl, String username, String password) {

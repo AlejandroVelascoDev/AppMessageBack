@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @Builder
 public class ChatResponse {
     
-    private Long id;
+    private UUID id;
     private String name;
     private String type;
     private ChatMessageResponse lastMessage;
@@ -52,7 +53,7 @@ public class ChatResponse {
     @AllArgsConstructor
     @Builder
     public static class ParticipantInfo {
-        private Long id;
+        private UUID id;
         private String username;
         private String email;
         

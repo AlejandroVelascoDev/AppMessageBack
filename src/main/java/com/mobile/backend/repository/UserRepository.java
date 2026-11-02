@@ -2,12 +2,13 @@ package com.mobile.backend.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.mobile.backend.entity.User;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, UUID> {
   List<User> findByUsernameContainingIgnoreCase(String username);
 
 

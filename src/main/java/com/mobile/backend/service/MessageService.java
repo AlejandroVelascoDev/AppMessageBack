@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class MessageService {
      * @throws IllegalArgumentException if chat/user not found or user is not a participant
      */
     @Transactional
-    public Message saveMessage(Long chatId, Long senderId, String content) {
+    public Message saveMessage(UUID chatId, UUID senderId, String content) {
         // Validate input
         if (content == null || content.trim().isEmpty()) {
             throw new IllegalArgumentException("Message content cannot be empty");
@@ -75,7 +76,7 @@ public class MessageService {
      * @return The saved Message entity
      */
     @Transactional
-    public Message saveMessage(Long chatId, Long senderId, String content, MessageType messageType) {
+    public Message saveMessage(UUID chatId, UUID senderId, String content, MessageType messageType) {
         Message message = saveMessage(chatId, senderId, content);
         message.setMessageType(messageType);
         return messageRepository.save(message);
@@ -88,7 +89,7 @@ public class MessageService {
      * @throws IllegalArgumentException if chat not found
      */
     @Transactional(readOnly = true)
-    public List<Message> getMessagesByChatId(Long chatId) {
+    public List<Message> getMessagesByChatId(UUID chatId) {
         // Verify chat exists
         if (!chatRepository.existsById(chatId)) {
             throw new IllegalArgumentException("Chat not found with ID: " + chatId);
@@ -106,7 +107,7 @@ public class MessageService {
      * @return Page of messages ordered by most recent first
      */
     @Transactional(readOnly = true)
-    public Page<Message> getMessagesByChatIdPaginated(Long chatId, int page, int size) {
+    public Page<Message> getMessagesByChatIdPaginated(UUID chatId, int page, int size) {
         if (!chatRepository.existsById(chatId)) {
             throw new IllegalArgumentException("Chat not found with ID: " + chatId);
         }
@@ -122,7 +123,7 @@ public class MessageService {
      * @return Number of messages marked as read
      */
     @Transactional
-    public int markMessagesAsRead(Long chatId, Long userId) {
+    public int markMessagesAsRead(UUID chatId, UUID userId) {
         // Verify user is participant
         if (!chatService.isUserInChat(chatId, userId)) {
             throw new IllegalArgumentException("User is not a participant in this chat");
@@ -138,7 +139,7 @@ public class MessageService {
      * @return Number of unread messages
      */
     @Transactional(readOnly = true)
-    public long getUnreadMessageCount(Long chatId, Long userId) {
+    public long getUnreadMessageCount(UUID chatId, UUID userId) {
         return messageRepository.countUnreadMessages(chatId, userId);
     }
 
@@ -148,7 +149,7 @@ public class MessageService {
      * @return The most recent Message, or null if no messages exist
      */
     @Transactional(readOnly = true)
-    public Message getLastMessage(Long chatId) {
+    public Message getLastMessage(UUID chatId) {
         return messageRepository.findLastMessageByChatId(chatId);
     }
 
@@ -159,7 +160,7 @@ public class MessageService {
      * @return List of messages containing the search term
      */
     @Transactional(readOnly = true)
-    public List<Message> searchMessages(Long chatId, String searchTerm) {
+    public List<Message> searchMessages(UUID chatId, String searchTerm) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
             throw new IllegalArgumentException("Search term cannot be empty");
         }
@@ -174,7 +175,7 @@ public class MessageService {
      * @throws IllegalArgumentException if user is not the sender
      */
     @Transactional
-    public void deleteMessage(Long messageId, Long userId) {
+    public void deleteMessage(Long messageId, UUID userId) {
         Message message = messageRepository.findById(messageId)
             .orElseThrow(() -> new IllegalArgumentException("Message not found with ID: " + messageId));
 
@@ -191,7 +192,7 @@ public class MessageService {
         throw new UnsupportedOperationException("Unimplemented method 'getMessageById'");
     }
 
-    public Message updateMessage(Long messageId, Long userId, String content) {
+    public Message updateMessage(Long messageId, UUID userId, String content) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateMessage'");
     }

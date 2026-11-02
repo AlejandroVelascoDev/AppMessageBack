@@ -97,9 +97,9 @@ curl -X POST http://localhost:8080/api/auth/login \
 curl http://localhost:8080/api/users/me \
   -H "Authorization: Bearer <JWT>"
 
-# Usuario por ID
-curl http://localhost:8080/api/users/1 \
-  -H "Authorization: Bearer <JWT>"
+# Usuario por ID (UUID)
+curl http://localhost:8080/api/users/<uuid> \
+    -H "Authorization: Bearer <JWT>"
 ```
 
 ---
@@ -163,6 +163,10 @@ psql "<direct-connection-string>" -f db/neon-schema.sql
 ```
 
 Con el esquema creado, configura `JPA_DDL_AUTO=validate` para que Hibernate no modifique la estructura en produccion.
+
+Los identificadores de `users` y `chats` son `UUID`; los mensajes conservan `BIGINT` como id. Si la base ya existia con ids `BIGINT`, ejecuta una sola vez `db/2026-11-02-uuid-ids.sql` (con la cadena directa) antes de arrancar con `validate`; el script convierte los ids preservando los datos y las relaciones.
+
+La app desactiva los prepared statements del lado del servidor (`prepareThreshold=0`) al construir la conexion, para evitar errores de planes cacheados con el pooler de Neon (`-pooler`) despues de cambios de esquema.
 
 ### 3. Variables de entorno
 

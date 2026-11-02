@@ -1,7 +1,9 @@
 package com.mobile.backend.dto.user;
 
+import java.util.UUID;
+
 public record UserResponse(
-  Long id,
+  UUID id,
   String email,
   String username
 ) {}

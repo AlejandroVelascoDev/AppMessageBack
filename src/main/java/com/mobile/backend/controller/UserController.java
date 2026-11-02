@@ -9,6 +9,7 @@ import com.mobile.backend.security.CustomUserDetails;
 import com.mobile.backend.service.UserService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -28,7 +29,7 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+  public ResponseEntity<UserResponse> getUserById(@PathVariable UUID id) {
     UserResponse user = userService.getUserById(id);
     return ResponseEntity.ok(user);
   }

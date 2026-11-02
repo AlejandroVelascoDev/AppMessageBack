@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Request DTO for creating a new chat
@@ -20,7 +21,7 @@ import java.util.List;
 public class ChatCreationRequest {
     
     @NotEmpty(message = "Participant IDs cannot be empty")
-    private List<Long> participantIds;
+    private List<UUID> participantIds;
     
     private String chatName; // Optional, for group chats
     

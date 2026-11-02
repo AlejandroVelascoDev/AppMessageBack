@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Response DTO for message information
@@ -18,8 +19,8 @@ import java.time.LocalDateTime;
 public class ChatMessageResponse {
     
     private Long id;
-    private Long chatId;
-    private Long senderId;
+    private UUID chatId;
+    private UUID senderId;
     private String senderUsername;
     private String content;
     private LocalDateTime timestamp;

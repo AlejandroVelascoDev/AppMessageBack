@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class ChatService {
      * @throws IllegalArgumentException if users are not found or invalid chat type
      */
     @Transactional
-    public Chat createChat(List<Long> userIds, String chatName, ChatType type) {
+    public Chat createChat(List<UUID> userIds, String chatName, ChatType type) {
         // Validate input
         if (userIds == null || userIds.isEmpty()) {
             throw new IllegalArgumentException("User IDs list cannot be empty");
@@ -70,7 +71,7 @@ public class ChatService {
      * @return List of chats ordered by last update
      */
     @Transactional(readOnly = true)
-    public List<Chat> getChatsByUserId(Long userId) {
+    public List<Chat> getChatsByUserId(UUID userId) {
         // Verify user exists
         if (!userRepository.existsById(userId)) {
             throw new IllegalArgumentException("User not found with ID: " + userId);
@@ -87,7 +88,7 @@ public class ChatService {
      * @throws IllegalArgumentException if chat is not found
      */
     @Transactional(readOnly = true)
-    public Chat getChatById(Long chatId) {
+    public Chat getChatById(UUID chatId) {
         return chatRepository.findById(chatId)
             .orElseThrow(() -> new IllegalArgumentException("Chat not found with ID: " + chatId));
     }
@@ -99,7 +100,7 @@ public class ChatService {
      * @return true if user is participant, false otherwise
      */
     @Transactional(readOnly = true)
-    public boolean isUserInChat(Long chatId, Long userId) {
+    public boolean isUserInChat(UUID chatId, UUID userId) {
         return chatRepository.isUserParticipant(chatId, userId);
     }
 
@@ -110,7 +111,7 @@ public class ChatService {
      * @throws IllegalArgumentException if chat is not a group or user/chat not found
      */
     @Transactional
-    public void addParticipant(Long chatId, Long userId) {
+    public void addParticipant(UUID chatId, UUID userId) {
         Chat chat = getChatById(chatId);
         
         // Only allow adding participants to group chats
@@ -131,7 +132,7 @@ public class ChatService {
      * @param userId ID of the user to remove
      */
     @Transactional
-    public void removeParticipant(Long chatId, Long userId) {
+    public void removeParticipant(UUID chatId, UUID userId) {
         Chat chat = getChatById(chatId);
         
         if (chat.getType() != ChatType.GROUP) {

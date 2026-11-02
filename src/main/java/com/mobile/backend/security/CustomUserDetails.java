@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 /**
  * Custom UserDetails implementation that includes user ID
@@ -16,7 +17,7 @@ import java.util.Collections;
 @Getter
 public class CustomUserDetails implements UserDetails {
     
-    private final Long id;
+    private final UUID id;
     private final String username;
     private final String password;
     private final String email;
