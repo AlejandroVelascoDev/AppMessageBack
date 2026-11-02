@@ -120,6 +120,56 @@ jwt.expiration=86400000
 
 ---
 
+## Ejecutar todo con Docker
+
+El `Dockerfile` construye la imagen de la API y `docker-compose.yml` levanta la API junto a PostgreSQL:
+
+```bash
+docker compose up --build
+```
+
+La API queda disponible en `http://localhost:8080`. El contenedor de la app espera a que PostgreSQL este saludable antes de arrancar.
+
+---
+
+## Despliegue en Vercel (contenedor OCI)
+
+El proyecto incluye un `Dockerfile` multi-stage y un `vercel.json` con `"framework": "container"`, por lo que Vercel puede construir y ejecutar la imagen como una Function.
+
+### 1. Variables de entorno
+
+En Vercel (Project Settings > Environment Variables) configura:
+
+| Variable                    | Obligatoria | Descripcion                                                        |
+|-----------------------------|-------------|--------------------------------------------------------------------|
+| `SPRING_DATASOURCE_URL`     | Si          | URL JDBC de PostgreSQL, ej. `jdbc:postgresql://host:5432/db?sslmode=require` |
+| `SPRING_DATASOURCE_USERNAME`| Si          | Usuario de la base de datos                                        |
+| `SPRING_DATASOURCE_PASSWORD`| Si          | Password de la base de datos                                       |
+| `JWT_SECRET`                | Si          | Clave Base64 de al menos 32 bytes                                  |
+| `JWT_EXPIRATION`            | No          | Milisegundos de validez del token (default `86400000`)             |
+| `JPA_DDL_AUTO`              | No          | `update` (default) o `validate` en produccion                      |
+| `JPA_SHOW_SQL`              | No          | `false` por defecto                                                |
+
+Vercel no hospeda PostgreSQL: usa un proveedor externo (Neon, Supabase, Vercel Postgres, etc.). Convierte el connection string a formato JDBC (`jdbc:postgresql://...`) y agrega `?sslmode=require`.
+
+### 2. Puerto
+
+El contenedor escucha en el puerto `80` por defecto (lo esperado por Vercel). Si necesitas otro, define la variable `PORT` en el proyecto.
+
+### 3. Desplegar
+
+```bash
+vercel
+```
+
+O conecta el repositorio de Git y Vercel reconstruira la imagen en cada push.
+
+### Nota sobre WebSocket
+
+Las Functions de Vercel limitan la duracion de cada conexion WebSocket segun el plan (Hobby 300s, Pro 800s). El cliente debe reconectar automaticamente y el estado compartido (salas, presencia) debe vivir en un store externo (ej. Redis), no en memoria del proceso.
+
+---
+
 ## Estructura del proyecto
 
 ```
