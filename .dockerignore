@@ -10,3 +10,11 @@ Dockerfile
 .dockerignore
 .env
 .env.*
+node_modules
+.neon
+package.json
+package-lock.json
+neon.ts
+.agents
+skills-lock.json
+db

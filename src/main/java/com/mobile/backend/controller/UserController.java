@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.mobile.backend.dto.user.UserResponse;
+import com.mobile.backend.security.CustomUserDetails;
 import com.mobile.backend.service.UserService;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class UserController {
 
   @GetMapping("/me")
   public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
-    String email = authentication.getName();
+    String email = currentEmail(authentication);
     UserResponse user = userService.getUserByEmail(email);
     return ResponseEntity.ok(user);
   }
@@ -46,16 +47,24 @@ public class UserController {
     Authentication authentication,
     @RequestBody com.mobile.backend.service.UserService.UpdateUserRequest request
   ) {
-    String email = authentication.getName();
+    String email = currentEmail(authentication);
     UserResponse user = userService.updateUser(email, request);
     return ResponseEntity.ok(user);
   }
 
   @DeleteMapping("/me")
   public ResponseEntity<Void> deleteCurrentUser(Authentication authentication) {
-    String email = authentication.getName();
+    String email = currentEmail(authentication);
     userService.deleteUser(email);
     return ResponseEntity.noContent().build();
+  }
+
+  private String currentEmail(Authentication authentication) {
+    Object principal = authentication.getPrincipal();
+    if (principal instanceof CustomUserDetails details) {
+      return details.getEmail();
+    }
+    return authentication.getName();
   }
 
   public record UpdateUserRequest(String username) {}
